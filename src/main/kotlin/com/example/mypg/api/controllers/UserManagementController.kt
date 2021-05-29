@@ -3,7 +3,7 @@ package com.example.mypg.api.controllers
 import com.example.mypg.api.`interface`.request.LoginRequest
 import com.example.mypg.api.`interface`.request.UserListRequest
 import com.example.mypg.api.`interface`.responce.UserResponce
-import com.example.mypg.api.usecases.UserUseCase
+import com.example.mypg.api.services.UserService
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -14,7 +14,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/userApi")
 class UserManagementController(
-    private val useCase: UserUseCase
+    private val useService: UserService
 ) {
 
     @ApiOperation("MYユーザ取得")
@@ -25,7 +25,7 @@ class UserManagementController(
             @RequestBody request: LoginRequest
     ): ResponseEntity<UserResponce> {
 
-        return useCase.getMyUser(request.userId, request.password)
+        return useService.getMyUser(request.userId, request.password)
     }
 
     @ApiOperation("ユーザリスト取得")
@@ -36,6 +36,6 @@ class UserManagementController(
             @RequestBody request: UserListRequest
     ): ResponseEntity<List<UserResponce>> {
 
-        return useCase.getUserList(request.limit, request.offset)
+        return useService.getUserList(request.limit, request.offset)
     }
 }
