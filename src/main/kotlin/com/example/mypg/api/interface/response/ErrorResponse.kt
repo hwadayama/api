@@ -1,9 +1,8 @@
-package com.example.mypg.api.`interface`.responce
+package com.example.mypg.api.`interface`.response
 
 import com.example.mypg.api.exception.MyException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.server.ServerErrorException
 
 class ErrorResponse(var message: String) {
     companion object {

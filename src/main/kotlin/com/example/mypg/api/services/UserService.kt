@@ -1,6 +1,6 @@
 package com.example.mypg.api.services
 
-import com.example.mypg.api.`interface`.responce.UserResponce
+import com.example.mypg.api.`interface`.response.UserResponce
 import com.example.mypg.api.repositorys.UserRepository
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service

@@ -1,6 +1,6 @@
 package com.example.mypg.api.repositorys
 
-import com.example.mypg.api.`interface`.responce.UserResponce
+import com.example.mypg.api.`interface`.response.UserResponce
 import com.example.mypg.api.dto.UserDto
 import com.example.mypg.api.exception.MyException
 import com.example.mypg.api.mapper.UserMapper

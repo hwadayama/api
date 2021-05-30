@@ -1,4 +1,4 @@
-package com.example.mypg.api.`interface`.responce
+package com.example.mypg.api.`interface`.response
 
 import java.time.LocalDateTime
 
