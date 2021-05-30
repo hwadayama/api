@@ -2,7 +2,7 @@ package com.example.mypg.api.`interface`.response
 
 import java.time.LocalDateTime
 
-data class UserResponce(
+data class UserResponse(
         var userid: String,
         var name: String,
         var password: String,

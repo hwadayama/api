@@ -2,9 +2,8 @@ package com.example.mypg.api.controllers
 
 import com.example.mypg.api.`interface`.request.LoginRequest
 import com.example.mypg.api.`interface`.request.UserListRequest
-import com.example.mypg.api.`interface`.response.FoundRows
-import com.example.mypg.api.`interface`.response.UserResponce
-import com.example.mypg.api.services.FoundRowsService
+import com.example.mypg.api.`interface`.response.UserInfoResponse
+import com.example.mypg.api.`interface`.response.UserResponse
 import com.example.mypg.api.services.UserService
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.ResponseEntity
@@ -16,8 +15,7 @@ import javax.validation.Valid
 @RestController
 @RequestMapping("/userApi")
 class UserManagementController(
-    private val useService: UserService,
-    private val foundRowsService: FoundRowsService
+    private val useService: UserService
 ) {
 
     @ApiOperation("MYユーザ取得")
@@ -26,7 +24,7 @@ class UserManagementController(
     fun getMyUser(
             @Valid
             @RequestBody request: LoginRequest
-    ): ResponseEntity<UserResponce> {
+    ): ResponseEntity<UserResponse> {
 
         return useService.getMyUser(request.userId, request.password)
     }
@@ -37,15 +35,8 @@ class UserManagementController(
     fun getUserList(
             @Valid
             @RequestBody request: UserListRequest
-    ): ResponseEntity<List<UserResponce>> {
+    ): ResponseEntity<UserInfoResponse> {
 
         return useService.getUserList(request.limit, request.offset)
-    }
-
-    @ApiOperation("件数取得")
-    @ResponseBody
-    @PostMapping("/foundRows")
-    fun getFoundRows(): ResponseEntity<FoundRows> {
-        return foundRowsService.getFoundRows()
     }
 }

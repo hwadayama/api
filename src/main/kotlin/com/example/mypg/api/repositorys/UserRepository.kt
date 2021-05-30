@@ -1,10 +1,12 @@
 package com.example.mypg.api.repositorys
 
-import com.example.mypg.api.`interface`.response.UserResponce
+import com.example.mypg.api.`interface`.response.OtherInfo
+import com.example.mypg.api.`interface`.response.UserInfoResponse
+import com.example.mypg.api.`interface`.response.UserResponse
 import com.example.mypg.api.dto.UserDto
 import com.example.mypg.api.exception.MyException
+import com.example.mypg.api.mapper.FoundRowsMapper
 import com.example.mypg.api.mapper.UserMapper
-import com.example.mypg.api.messages.Messages.Companion.MESSAGE_NOT_FOUND
 import com.example.mypg.api.messages.Messages.Companion.MESSAGE_SERVER_ERROR
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -13,17 +15,15 @@ import java.lang.RuntimeException
 
 @Repository
 class UserRepository(
-    private val mapper: UserMapper
+    private val mapper: UserMapper,
+    private val foundRowMapper: FoundRowsMapper
 ) {
 
-    fun getMyUser(userId: String, password: String): ResponseEntity<UserResponce> {
+    fun getMyUser(userId: String, password: String): ResponseEntity<UserResponse> {
 
         try{
             val dto = mapper.getMyUser(userId, password)
-            if (dto == null){
-                throw MyException(HttpStatus.NOT_FOUND.value(),MESSAGE_NOT_FOUND)
-            }
-            val response = UserResponce(
+            val response = UserResponse(
                     userid = dto.userid,
                     password = dto.password,
                     name = dto.name,
@@ -44,14 +44,14 @@ class UserRepository(
 
     }
 
-    fun getUserList(limit: Long, offset: Long): ResponseEntity<List<UserResponce>> {
+    fun getUserList(limit: Long, offset: Long): ResponseEntity<UserInfoResponse> {
 
-        val response = mutableListOf<UserResponce>()
+        val response = mutableListOf<UserResponse>()
         val dtos:List<UserDto> = mapper.getUserList(limit, offset)
 
         try{
             for (data in dtos){
-                val userData = UserResponce(
+                val userData = UserResponse(
                         userid = data.userid,
                         password = data.password,
                         name = data.name,
@@ -67,9 +67,15 @@ class UserRepository(
                 )
                 response.add(userData)
             }
+
+            val foundRow = foundRowMapper.getFoundRows()
+            val otherInfo = OtherInfo(limit,offset,foundRow.row)
+            val userInfo = UserInfoResponse(response,otherInfo)
+
+            return ResponseEntity.ok(userInfo)
         }catch (e:RuntimeException){
             throw MyException(HttpStatus.INTERNAL_SERVER_ERROR.value(),MESSAGE_SERVER_ERROR)
         }
-        return ResponseEntity.ok(response)
+
     }
 }
